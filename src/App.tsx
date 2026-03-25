@@ -4,6 +4,10 @@
  */
 
 import React, { useState, useMemo } from 'react';
+// Nếu bạn dùng chart từ recharts, import chart ở đây (ví dụ: LineChart, BarChart, PieChart, ...)
+import { LineChart, BarChart, PieChart } from 'recharts';
+
+// Tất cả icon import từ lucide-react
 import { 
   LayoutDashboard, 
   Users, 
@@ -28,8 +32,8 @@ import {
   X,
   CreditCard,
   Phone
-} from 'recharts';
-import { motion } from 'motion/react';
+} from 'lucide-react';
+import { motion } from "framer-motion";
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
