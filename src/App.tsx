@@ -28,17 +28,6 @@ import {
   X,
   CreditCard,
   Phone
-} from 'lucide-react';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  LineChart, 
-  Line
 } from 'recharts';
 import { motion } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
