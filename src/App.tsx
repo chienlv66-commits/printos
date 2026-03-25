@@ -1,13 +1,16 @@
-/**
+react/**
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import React, { useState, useMemo } from 'react';
-// Nếu bạn dùng chart từ recharts, import chart ở đây (ví dụ: LineChart, BarChart, PieChart, ...)
-import { LineChart, BarChart, PieChart } from 'recharts';
 
-// Tất cả icon import từ lucide-react
+// Recharts - import tất cả component cần dùng
+import { 
+  LineChart, Line, BarChart, PieChart, Pie, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer 
+} from 'recharts';
+
+// Icons - import từ lucide-react
 import { 
   LayoutDashboard, 
   Users, 
@@ -33,10 +36,13 @@ import {
   CreditCard,
   Phone
 } from 'lucide-react';
+
+// Animation
 import { motion } from "framer-motion";
+
+// Class utilities cho Tailwind
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
