@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PrintOS - Báo giá AI</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f7fb;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    .box {
+      margin-top: 20px;
+    }
+
+    pre {
+      background: #111;
+      color: #0f0;
+      padding: 10px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🚀 PrintOS - Báo giá AI</h2>
+
+<div class="box">
+  <h3>👤 Khách hàng</h3>
+  <input id="ten_khach" placeholder="Tên khách">
+  <input id="sdt" placeholder="SĐT">
+</div>
+
+<div class="box">
+  <h3>🤖 Nhập nhanh</h3>
+  <input id="text" placeholder="VD: in hộp gài 100 cái duplex">
+</div>
+
+<div class="box">
+  <h3>📦 Hoặc nhập tay</h3>
+  <input id="ten_sp" placeholder="Tên sản phẩm">
+  <input id="so_luong" type="number" placeholder="Số lượng">
+</div>
+
+<button onclick="baoGia()">🚀 Báo giá ngay</button>
+
+<div class="box">
+  <h3>📊 Kết quả</h3>
+  <pre id="ketqua"></pre>
+</div>
+
+<div class="box">
+  <h3>💬 Tin nhắn gửi khách</h3>
+  <textarea id="message" rows="6"></textarea>
+  <button onclick="copyText()">📋 Copy</button>
+</div>
+
+<div class="box">
+  <h3>📄 Xuất báo giá PDF</h3>
+  <button onclick="taiPDF()">📄 Tải PDF báo giá</button>
+</div>
+
+<div class="box">
+  <h3>📈 Dashboard</h3>
+  <button onclick="loadDashboard()">Xem báo cáo</button>
+  <pre id="dashboard"></pre>
+</div>
+
+</div>
+
+<script>
+async function baoGia() {
+  const data = {
+    ten_khach: document.getElementById("ten_khach").value,
+    sdt: document.getElementById("sdt").value,
+    text: document.getElementById("text").value,
+    ten_sp: document.getElementById("ten_sp").value,
+    so_luong: Number(document.getElementById("so_luong").value)
+  };
+
+  const res = await fetch("/quote", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+
+  const result = await res.json();
+
+  document.getElementById("ketqua").innerText =
+    JSON.stringify(result, null, 2);
+
+  if (result.message) {
+    document.getElementById("message").value = result.message;
+  }
+}
+
+function copyText() {
+  const textarea = document.getElementById("message");
+  textarea.select();
+  document.execCommand("copy");
+  alert("Đã copy!");
+}
+
+async function taiPDF() {
+  const raw = document.getElementById("ketqua").innerText;
+
+  if (!raw) {
+    alert("Chưa có dữ liệu!");
+    return;
+  }
+
+  const parsed = JSON.parse(raw);
+
+  const data = parsed.order;
+
+  const res = await fetch("/export-pdf", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+
+  const blob = await res.blob();
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "baogia.pdf";
+  a.click();
+}
+
+async function loadDashboard() {
+  const res = await fetch("/dashboard");
+  const data = await res.json();
+
+  document.getElementById("dashboard").innerText =
+    JSON.stringify(data, null, 2);
+}
+</script>
+
+</body>
+</html>
